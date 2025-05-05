@@ -247,6 +247,8 @@
 // };
 
 // export default Home;
+
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -301,17 +303,6 @@ const Home = () => {
     navigate('/');
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const loginName = e.target.loginName.value; // Get the login name from the input field
-    if (loginName.trim()) {
-      localStorage.setItem("token", "demo-token");
-      localStorage.setItem("userName", loginName);
-      setUserName(loginName);
-      setIsLoggedIn(true);
-    }
-  };
-
   return (
     <div className="home-container">
       {/* Header with navigation */}
@@ -324,7 +315,7 @@ const Home = () => {
             <h1 className="logo-text-small">RAJAA STORES</h1>
           </div>
           <nav className="main-nav">
-            <a href="#home" className="nav-link">Home</a>
+            <button className="nav-link">Home</button>
             <Link to="/about" className="nav-link">About Us</Link>
             <Link to="/contact" className="nav-link">Contacts</Link>
             <Link to="/products" className="nav-link">Products</Link>
