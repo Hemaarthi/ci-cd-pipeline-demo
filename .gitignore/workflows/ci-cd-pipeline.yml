@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,12 +18,9 @@ jobs:
       with:
         node-version: '14'
 
-    - name: Install dependencies
+    - name: Install dependencies (client)
       run: |
         cd client
-        npm install
-        cd ..
-        cd server
         npm install
 
     - name: Build client
@@ -31,8 +28,26 @@ jobs:
         cd client
         npm run build
 
-    - name: Deploy to GitHub Pages
+    - name: Install dependencies (server)
+      run: |
+        cd server
+        npm install
+
+    - name: Deploy to GitHub Pages (client)
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./client/build
+
+    - name: Deploy to Heroku (server)
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: |
+        cd server
+        git init
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "Deploy to Heroku"
+        heroku git:remote -a your-heroku-app-name
+        git push heroku main --force
