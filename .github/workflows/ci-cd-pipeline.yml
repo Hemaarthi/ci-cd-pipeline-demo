@@ -18,32 +18,50 @@ jobs:
       with:
         node-version: '14'
 
-    - name: Install dependencies (client)
+    - name: Check for frontend directory
       run: |
-        cd client
+        if [ -d "frontend" ]; then
+          echo "Frontend directory found"
+        else
+          echo "Frontend directory not found"
+          exit 1
+        fi
+
+    - name: Install dependencies (frontend)
+      run: |
+        cd frontend
         npm install
 
-    - name: Build client
+    - name: Build frontend
       run: |
-        cd client
+        cd frontend
         npm run build
 
-    - name: Install dependencies (server)
+    - name: Check for backend directory
       run: |
-        cd server
+        if [ -d "backend" ]; then
+          echo "Backend directory found"
+        else
+          echo "Backend directory not found"
+          exit 1
+        fi
+
+    - name: Install dependencies (backend)
+      run: |
+        cd backend
         npm install
 
-    - name: Deploy to GitHub Pages (client)
+    - name: Deploy to GitHub Pages (frontend)
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./client/build
+        publish_dir: ./frontend/build
 
-    - name: Deploy to Heroku (server)
+    - name: Deploy to Heroku (backend)
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
-        cd server
+        cd backend
         git init
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
