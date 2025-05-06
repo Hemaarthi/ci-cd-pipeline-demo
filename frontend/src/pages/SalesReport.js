@@ -155,6 +155,7 @@
 
 // export default SalesReport;
 
+
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
@@ -214,7 +215,7 @@ const SalesReport = () => {
 
   useEffect(() => {
     fetchReport();
-  }, [fromDate, toDate]); // Add fromDate and toDate to the dependency array
+  }, [fromDate, toDate, fetchReport]); // Add fetchReport to the dependency array
 
   if (loading) return <p className="loading-text">Loading report...</p>;
   if (!report) return <p className="error-text">Failed to load report.</p>;
