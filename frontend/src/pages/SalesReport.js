@@ -155,20 +155,19 @@
 
 // export default SalesReport;
 
-
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
-    Bar,
-    BarChart,
-    Cell,
-    Legend,
-    Pie,
-    PieChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis
+  Bar,
+  BarChart,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
 } from 'recharts';
 import './SalesReport.css';
 
@@ -180,7 +179,7 @@ const SalesReport = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
 
-  const fetchReport = async () => {
+  const fetchReport = useCallback(async () => {
     setLoading(true);
     try {
       const query = fromDate && toDate ? `?from=${fromDate}&to=${toDate}` : '';
@@ -191,7 +190,7 @@ const SalesReport = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fromDate, toDate]);
 
   const handleCSVDownload = async () => {
     try {
@@ -215,7 +214,7 @@ const SalesReport = () => {
 
   useEffect(() => {
     fetchReport();
-  }, [fromDate, toDate, fetchReport]); // Add fetchReport to the dependency array
+  }, [fetchReport]);
 
   if (loading) return <p className="loading-text">Loading report...</p>;
   if (!report) return <p className="error-text">Failed to load report.</p>;
